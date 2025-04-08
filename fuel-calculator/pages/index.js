@@ -15,10 +15,10 @@ export default function Home() {
         const priceMap = {};
         oil.forEach(o => {
           switch (o.PRODCD) {
-            case 'B027': priceMap.gasoline = parseFloat(o.PRICE); break;
-            case 'D047': priceMap.diesel = parseFloat(o.PRICE); break;
-            case 'K015': priceMap.premium = parseFloat(o.PRICE); break;
-            case 'C004': priceMap.lpg = parseFloat(o.PRICE); break;
+          case 'B027': priceMap.gasoline = parseFloat(o.PRICE); break;
+          case 'D047': priceMap.diesel = parseFloat(o.PRICE); break;
+          case 'B034': priceMap.premium = parseFloat(o.PRICE); break; 
+          case 'K015': priceMap.lpg = parseFloat(o.PRICE); break;  
           }
         });
         setPrices(priceMap);

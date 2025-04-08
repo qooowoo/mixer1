@@ -1,5 +1,5 @@
 export async function getServerSideProps() {
-  const API_KEY = "YOUR_OPINET_API_KEY";
+  const API_KEY = "F250408253";
   const url = `http://www.opinet.co.kr/api/avgAllPrice.do?out=json&code=${API_KEY}`;
   let prices = { gasoline: 0, diesel: 0, premium: 0, lpg: 0 };
 

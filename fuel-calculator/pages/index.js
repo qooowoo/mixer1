@@ -53,16 +53,26 @@ export default function Home({ prices }) {
 }, [year]);
 
   const handleAverage = () => {
-    const matches = data.filter(car =>
-      (!manufacturer || car.업체명?.includes(manufacturer)) &&
-      (!modelKeyword || car.모델명?.includes(modelKeyword)) &&
-      (!fuel || car.연료?.includes(fuel)) &&
-      (!drive || car.모델명?.includes(drive))
-    );
+    const matches = data.filter(car => {
+      const rawYear = car["출시연도"]; // 숫자
+      const maker = car["업체명"];
+      const model = car["모델명"];
+      const fuelType = car["연료"];
+
+      return (
+        (!year || String(rawYear) === String(year)) &&
+        (!manufacturer || maker?.includes(manufacturer)) &&
+        (!modelKeyword || model?.includes(modelKeyword)) &&
+        (!fuel || fuelType?.includes(fuel)) &&
+        (!drive || model?.includes(drive))
+      );
+    });
+
 
     const avg = matches.length > 0
-      ? (matches.reduce((sum, car) => sum + parseFloat(car.도심주행 || car.도심연비 || 0), 0) / matches.length).toFixed(2)
+      ? (matches.reduce((sum, car) => sum + parseFloat(car["도심주행연비"] || 0), 0) / matches.length).toFixed(2)
       : null;
+
 
     setAverage(avg);
   };

@@ -39,11 +39,18 @@ export default function Home({ prices }) {
   const [result, setResult] = useState('');
 
   useEffect(() => {
-    if (!year) return;
-    fetch(`/api/cars?year=${year}`)
-      .then(res => res.json())
-      .then(json => setData(json));
-  }, [year]);
+  if (!year) return;
+  fetch(`/api/cars?year=${year}`)
+    .then(res => res.json())
+    .then(json => {
+      console.log('📦 연비 API 응답:', json); // ← 확인 포인트
+      if (Array.isArray(json)) {
+        setData(json); // 정상 응답이면 배열로 저장
+      } else {
+        console.warn('🚫 응답이 배열이 아닙니다:', typeof json);
+      }
+    });
+}, [year]);
 
   const handleAverage = () => {
     const matches = data.filter(car =>

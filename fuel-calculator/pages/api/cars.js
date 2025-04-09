@@ -7,15 +7,16 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API 키 없음' });
   }
 
-  const url = `http://apis.data.go.kr/B553530/energy/allCarInfo?serviceKey=${API_KEY}&returnType=JSON&pageNo=1&numOfRows=1000`;
+  const baseUrl = 'https://api.odcloud.kr/api/15083023/v1/uddi:399f86ce-69dd-4de3-98d4-af4a9c3fa1d8';
+  const url = `${baseUrl}?page=1&perPage=1000&serviceKey=${API_KEY}`;
 
   try {
-    const response = await fetch(url);
-    const data = await response.json(); // 이제 JSON으로 잘 파싱됨!
+    const response = await fetch(url, {
+      headers: { Accept: 'application/json' }
+    });
+    const data = await response.json();
 
-    console.log('✅ 응답 구조:', JSON.stringify(data, null, 2));
-
-    const all = data?.response?.body?.items || [];
+    const all = data?.data || [];
 
     const filtered = year
       ? all.filter(car => String(car["출시연도"] || car["연도"]) === String(year))
@@ -23,7 +24,7 @@ export default async function handler(req, res) {
 
     res.status(200).json(filtered);
   } catch (e) {
-    console.error('❌ API 요청 중 에러 발생:', e.message);
-    res.status(500).json({ error: 'API 에러' });
+    console.error('❌ API 호출 실패:', e.message);
+    res.status(500).json({ error: '서버 오류 발생' });
   }
 }
